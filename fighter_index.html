@@ -1,0 +1,110 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Socket.IO chat</title>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { font: 13px Helvetica, Arial; }
+      form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
+      form input { border: 0; padding: 10px; width: 90%; margin-right: 0.5%; }
+      form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
+      div.chatlog{width:69%;height:calc(99vh - 50px);border:2px solid black;overflow-y:scroll;display:inline-block;}
+      div.userlist{width:29%;height:calc(99vh - 50px);border:2px solid black;overflow-y:scroll;display:inline-block;overflow-x:auto;}
+      #messages { list-style-type: none; margin: 0; padding: 0; }
+      #messages li { padding: 5px 10px; }
+      #messages li:nth-child(odd) { background: #eee; }
+    </style>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://lindows.kr/nodejs/gameControl.js"></script>
+  </head>
+  <body>
+
+    <script>
+    
+    window.onload=function(){
+        var socket = io();
+
+        initialize();
+        socket.emit("gameReady","");
+
+        document.body.onkeydown=()=>{
+            socket.emit("keydown",event.key.toLowerCase());
+            //alert(event.key+" down");
+        }
+
+        document.body.onkeyup=()=>{
+            socket.emit("keyup",event.key.toLowerCase());
+            //alert(event.key+" up");
+        }        
+        mainCanvas.addEventListener('mousemove',(e)=>{
+            mPointer.p.x=e.offsetX;
+            mPointer.p.y=e.offsetY;
+        });
+        mainCanvas.addEventListener('contextmenu',(e)=>{
+            e.preventDefault();
+            rally.p.x=e.offsetX;
+            rally.p.y=e.offsetY;
+            rally.type=1;
+
+            socket.emit("rl",rally.p.x+","+rally.p.y);
+            console.log("Rally:"+rally.p.x+","+rally.p.y);
+        
+        });
+        mainCanvas.addEventListener('mousedown',(e)=>{
+            e.preventDefault();
+
+            if(e.button==0){
+                socket.emit("bs",e.offsetX+","+e.offsetY);
+                console.log("Shot:"+e.offsetX+","+e.offsetY);
+            }
+
+        
+        });
+        socket.on('initializeData',function(data){
+          initializePlayers(data);
+        } );
+
+        socket.on('p',function(data){
+          movePlayer(data);
+
+          
+
+        } );
+        socket.on("b",function(data){
+            setBullets(data);
+            drawScreen();
+
+        } );
+        
+        socket.on('renew userlist',function(rawuserlist){
+
+            while(ul_users.firstChild){
+              ul_users.removeChild(ul_users.lastChild);
+            }
+            let userlist=rawuserlist.split(";");
+            for(var i=0;i<userlist.length;i++){
+              $('#ul_users').append($('<li>').text(userlist[i]));
+            }
+        });
+    }
+
+
+
+      $(function () {
+        var socket = io();
+        $('form').submit(function(e) {
+          e.preventDefault(); // prevents page reloading
+          socket.emit('chat message', $('#m').val());
+          $('#m').val('');
+          return false;
+        });
+
+      });
+    </script>
+
+
+    
+  </body>
+</html>
+
