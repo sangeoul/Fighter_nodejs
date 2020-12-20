@@ -190,6 +190,9 @@ function initializePlayers(data) {
         if (players[i] === undefined) {
             players[i] = new Player(MAIN_WIDTH / 2, MAIN_HEIGHT / 2, "#" + colors[i + 1]);
         }
+        else {
+            players[i].color = "#" + colors[i + 1];
+        }
         players[i].connected = parseInt(status.charAt(i));
     }
 }
