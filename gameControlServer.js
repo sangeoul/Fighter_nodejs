@@ -1,5 +1,8 @@
-export const MAIN_WIDTH = 800;
-export const MAIN_HEIGHT = 540;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.getRandomColor = exports.hitBullet = exports.addNewBullet = exports.Bullet = exports.Player = exports.FieldObject = exports.MyInfo = exports.Vector = exports.bullets = exports.players = exports.MAIN_HEIGHT = exports.MAIN_WIDTH = void 0;
+exports.MAIN_WIDTH = 800;
+exports.MAIN_HEIGHT = 540;
 const VELOCITY_DEFAULT = 140;
 const ACCEL_DEFAULT = 100;
 const TURNING_ADDITIONAL_RATE = 0.02;
@@ -7,9 +10,9 @@ const STOPPING_TIME = 1;
 const GUN_COOLDOWN = 300;
 const BULLET_VELOCITY_RATE = 2.4;
 const REVIVE_TIME = 5;
-export var players = new Array();
-export var bullets = new Array();
-export class Vector {
+exports.players = new Array();
+exports.bullets = new Array();
+class Vector {
     constructor(x_, y_) {
         if (x_ === undefined) {
             x_ = 0;
@@ -61,15 +64,17 @@ export class Vector {
         return this.x * v.x + this.y * v.y;
     }
 }
-export class MyInfo {
+exports.Vector = Vector;
+class MyInfo {
 }
-export class FieldObject {
+exports.MyInfo = MyInfo;
+class FieldObject {
     constructor(x_, y_, v_, a_) {
         if (x_ === undefined) {
-            x_ = MAIN_WIDTH / 2;
+            x_ = exports.MAIN_WIDTH / 2;
         }
         if (y_ === undefined) {
-            y_ = MAIN_HEIGHT / 2;
+            y_ = exports.MAIN_HEIGHT / 2;
         }
         if (v_ === undefined) {
             v_ = VELOCITY_DEFAULT;
@@ -135,16 +140,16 @@ export class FieldObject {
         }
         this.p.x += this.v.x * (frametime_ / 1000);
         this.p.y += this.v.y * (frametime_ / 1000);
-        if (this.p.x > MAIN_WIDTH) {
-            this.p.x = MAIN_WIDTH;
+        if (this.p.x > exports.MAIN_WIDTH) {
+            this.p.x = exports.MAIN_WIDTH;
             this.v.x = 0;
         }
         if (this.p.x < 0) {
             this.p.x = 0;
             this.v.x = 0;
         }
-        if (this.p.y > MAIN_HEIGHT) {
-            this.p.y = MAIN_HEIGHT;
+        if (this.p.y > exports.MAIN_HEIGHT) {
+            this.p.y = exports.MAIN_HEIGHT;
             this.v.y = 0;
         }
         if (this.p.y < 0) {
@@ -153,7 +158,8 @@ export class FieldObject {
         }
     }
 }
-export class Player extends FieldObject {
+exports.FieldObject = FieldObject;
+class Player extends FieldObject {
     constructor(x, y, socketid, clientIp) {
         super(x, y);
         this.socketId = socketid;
@@ -226,8 +232,8 @@ export class Player extends FieldObject {
         if (this.type == 0 && this.connected == 1) {
             if (this.deadtime + (REVIVE_TIME * 1000) < new Date().getTime()) {
                 this.type = 1;
-                this.p.x = Math.floor(Math.random() * MAIN_WIDTH);
-                this.p.y = Math.floor(Math.random() * MAIN_HEIGHT);
+                this.p.x = Math.floor(Math.random() * exports.MAIN_WIDTH);
+                this.p.y = Math.floor(Math.random() * exports.MAIN_HEIGHT);
                 console.log("REVIVE!" + this.deadtime);
             }
         }
@@ -252,7 +258,8 @@ export class Player extends FieldObject {
         console.log("HIT!" + this.deadtime);
     }
 }
-export class Bullet extends FieldObject {
+exports.Player = Player;
+class Bullet extends FieldObject {
     constructor(px_, py_, dx_, dy_) {
         super(px_, py_);
         this.v.x = dx_ - px_;
@@ -269,13 +276,13 @@ export class Bullet extends FieldObject {
     move(frametime_) {
         this.p.x += this.v.x * frametime_ / 1000;
         this.p.y += this.v.y * frametime_ / 1000;
-        if (this.p.x > MAIN_WIDTH) {
+        if (this.p.x > exports.MAIN_WIDTH) {
             this.type = 0;
         }
         if (this.p.x < 0) {
             this.type = 0;
         }
-        if (this.p.y > MAIN_HEIGHT) {
+        if (this.p.y > exports.MAIN_HEIGHT) {
             this.type = 0;
         }
         if (this.p.y < 0) {
@@ -283,23 +290,25 @@ export class Bullet extends FieldObject {
         }
     }
 }
-export function addNewBullet(px_, py_, dx_, dy_) {
-    for (var i = 0; i < bullets.length; i++) {
-        if (bullets[i].type == 0) {
-            bullets[i] = new Bullet(px_, py_, dx_, dy_);
-            return bullets[i];
+exports.Bullet = Bullet;
+function addNewBullet(px_, py_, dx_, dy_) {
+    for (var i = 0; i < exports.bullets.length; i++) {
+        if (exports.bullets[i].type == 0) {
+            exports.bullets[i] = new Bullet(px_, py_, dx_, dy_);
+            return exports.bullets[i];
         }
     }
-    bullets[bullets.length] = new Bullet(px_, py_, dx_, dy_);
-    return bullets[bullets.length - 1];
+    exports.bullets[exports.bullets.length] = new Bullet(px_, py_, dx_, dy_);
+    return exports.bullets[exports.bullets.length - 1];
 }
-export function hitBullet() {
-    for (let i = 0; i < players.length; i++) {
-        for (let j = 0; j < bullets.length; j++) {
-            if (players[i].type > 0 && bullets[j].type > 0) {
-                if (7 * 7 > (players[i].p.x - bullets[j].p.x) * (players[i].p.x - bullets[j].p.x) + (players[i].p.y - bullets[j].p.y) * (players[i].p.y - bullets[j].p.y)) {
-                    players[i].dead();
-                    bullets[j].type = 0;
+exports.addNewBullet = addNewBullet;
+function hitBullet() {
+    for (let i = 0; i < exports.players.length; i++) {
+        for (let j = 0; j < exports.bullets.length; j++) {
+            if (exports.players[i].type > 0 && exports.bullets[j].type > 0) {
+                if (7 * 7 > (exports.players[i].p.x - exports.bullets[j].p.x) * (exports.players[i].p.x - exports.bullets[j].p.x) + (exports.players[i].p.y - exports.bullets[j].p.y) * (exports.players[i].p.y - exports.bullets[j].p.y)) {
+                    exports.players[i].dead();
+                    exports.bullets[j].type = 0;
                     return [i, j];
                 }
             }
@@ -307,7 +316,8 @@ export function hitBullet() {
     }
     return null;
 }
-export function getRandomColor() {
+exports.hitBullet = hitBullet;
+function getRandomColor() {
     let codes = "0123456789ABCDEF";
     let colorString = "#";
     for (var i = 0; i < 6; i++) {
@@ -315,3 +325,4 @@ export function getRandomColor() {
     }
     return colorString;
 }
+exports.getRandomColor = getRandomColor;

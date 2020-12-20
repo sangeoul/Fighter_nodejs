@@ -28,7 +28,7 @@ io.sockets.on('connection', function (socket) {
   
     let newman=addNewUser(socketId,clientIp);  
     if(newman.connected==false){
-        console.log('new player'+socketId+' connected : '+clientIp);
+        console.log('new player '+socketId+' connected : '+clientIp);
         newman.connected=true;
         newman.type=1;
     }
@@ -142,7 +142,7 @@ function sendUserInitData(){
             playerColors+=gameControler.players[i].color;
         }
     }
-    console.log('Send Init Data:'+playerConnectionStatus);
+    console.log('Send Init Data:'+playerConnectionStatus+":"+playerColors);
     io.emit('initializeData',gameControler.players.length+":"+playerConnectionStatus+":"+playerColors);    
 }
 function runFrame(){
@@ -192,6 +192,7 @@ function addNewUser(socketId,clientIp){
 
     for(var i=0;i<gameControler.players.length;i++){
         if(gameControler.players[i].clientIp==clientIp){
+            gameControler.players[i].color=gameControler.getRandomColor();
             return gameControler.players[i];
         }
     }

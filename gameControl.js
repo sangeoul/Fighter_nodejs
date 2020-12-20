@@ -150,7 +150,8 @@ class Player extends FieldObject {
         this.image = new Image();
         this.image.src = "https://lindows.kr/nodejs/images/player.png";
         if (color_ == undefined) {
-            color_ = "rgb(" + Math.floor(Math.random() * 256) + "," + Math.floor(Math.random() * 256) + "," + Math.floor(Math.random() * 256) + ")";
+            color_ = "#000000"; //debug
+            //color_="rgb("+Math.floor(Math.random()*256)+","+Math.floor(Math.random()*256)+","+Math.floor(Math.random()*256)+")";
         }
         this.color = color_;
     }
@@ -184,7 +185,7 @@ class Bullet extends FieldObject {
 function initializePlayers(data) {
     let userNumber = parseInt(data.split(":")[0]);
     let status = data.split(":")[1];
-    let colors = data.split(":").split("#");
+    let colors = data.split(":")[2].split("#");
     for (let i = 0; i < userNumber; i++) {
         if (players[i] === undefined) {
             players[i] = new Player(MAIN_WIDTH / 2, MAIN_HEIGHT / 2, "#" + colors[i + 1]);

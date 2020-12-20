@@ -16,7 +16,7 @@
     </style>
     <script src="/socket.io/socket.io.js"></script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script src="./gameControl.js"></script>
+    <script src="https://lindows.kr/nodejs/gameControl.js"></script>
   </head>
   <body>
 
@@ -63,6 +63,7 @@
         });
         socket.on('initializeData',function(data){
           initializePlayers(data);
+          console.log(data);
         } );
 
         socket.on('p',function(data){
