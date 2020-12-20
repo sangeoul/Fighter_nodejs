@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+      "module": "es2015",
+      "moduleResolution": "node",
+      "outDir": "",
+      "rootDir": "",
+      "target": "es6",
+    },
+    "exclude": [
+      "dist",
+      "node_modules",
+      "gameControl.js",
+      "gameContorlServer.js"
+    ]
+  }

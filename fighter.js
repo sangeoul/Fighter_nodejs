@@ -131,16 +131,19 @@ function sendUserlist(){
 
 function sendUserInitData(){
     let playerConnectionStatus="";
+    let playerColors="";
     for(let i=0;i<gameControler.players.length;i++){
         if(gameControler.players[i].connected){
             playerConnectionStatus+="1";
+            playerColors+=gameControler.players[i].color;
         }
         else{
             playerConnectionStatus+="0";
+            playerColors+=gameControler.players[i].color;
         }
     }
     console.log('Send Init Data:'+playerConnectionStatus);
-    io.emit('initializeData',gameControler.players.length+":"+playerConnectionStatus);    
+    io.emit('initializeData',gameControler.players.length+":"+playerConnectionStatus+":"+playerColors);    
 }
 function runFrame(){
     let frametime=new Date().getTime()-lastFrameTime;
